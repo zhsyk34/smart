@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dnk.smart.door.dao.TenantDao">
+    <sql id="entity">tenant</sql>
+    <sql id="id">id</sql>
+    <sql id="column">id, houseId, name, idCard, email, gender, phone, used, createTime, updateTime</sql>
+    <sql id="page">
+        <if test="offset >= 0 and limit > 0">
+            limit #{offset}, #{limit}
+        </if>
+    </sql>
+    <!-- TODO -->
+    <sql id="search">
+        <include refid="entity"/>
+        JOIN house ON tenant.houseId = house.id
+        JOIN unit ON house.unitId = unit.id
+        JOIN build ON unit.buildId = build.id
+        <where>
+            <if test="build != null and build != ''">
+                build.name LIKE "%"#{build}"%"
+            </if>
+            <if test="unit != null and unit != ''">
+                AND unit.name LIKE "%"#{unit}"%"
+            </if>
+            <if test="house != null and house != ''">
+                AND house.name LIKE "%"#{house}"%"
+            </if>
+            <if test="name != null and name != ''">
+                AND tenant.name LIKE "%"#{name}"%"
+            </if>
+            <if test="idCard != null and idCard != ''">
+                AND tenant.idCard LIKE "%"#{idCard}"%"
+            </if>
+            <if test="gender != null and gender != ''">
+                AND tenant.gender = #{gender}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND tenant.phone LIKE "%"#{phone}"%"
+            </if>
+        </where>
+    </sql>
+
+    <insert id="save">
+        INSERT INTO
+        <include refid="entity"/>
+        (
+        <include refid="column"/>
+        )
+        VALUES
+        (NULL, #{houseId}, #{name}, #{idCard}, #{email}, #{gender}, #{phone}, #{used}, NULL, NULL)
+    </insert>
+
+    <insert id="saves">
+        INSERT INTO
+        <include refid="entity"/>
+        (
+        <include refid="column"/>
+        )
+        VALUES
+        <foreach collection="list" item="entity" separator=",">
+            (NULL, #{entity.houseId}, #{entity.name}, #{entity.idCard}, #{entity.email}, #{entity.gender}, #{entity.phone}, #{entity.used}, NULL, NULL)
+        </foreach>
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+
+    <delete id="deleteByEntity">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByEntities">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="list" item="entity" open="(" separator="," close=")">
+            #{entity.id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        UPDATE
+        <include refid="entity"/>
+        SET
+        houseId = #{houseId}, name = #{name}, idCard = #{idCard}, email = #{email}, gender = #{gender}, phone = #{phone}, used = #{used}, updateTime = CURRENT_TIMESTAMP
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </update>
+
+    <select id="findById" resultType="Tenant">
+        SELECT * FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </select>
+
+    <select id="findAll" resultType="Tenant">
+        SELECT * FROM
+        <include refid="entity"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+    </select>
+
+    <select id="findInterval" resultType="Tenant">
+        SELECT * FROM
+        <include refid="entity"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="entity"/>
+    </select>
+
+    <select id="findList" resultType="Tenant">
+        SELECT * FROM
+        <include refid="entity"/>
+        <where>
+            <if test="houseId != null and houseId > 0">
+                houseId = #{houseId}
+            </if>
+            <if test="name != null and name != ''">
+                AND name LIKE "%"#{name}"%"
+            </if>
+            <if test="idCard != null and idCard != ''">
+                AND idCard LIKE "%"#{idCard}"%"
+            </if>
+            <if test="gender != null and gender != ''">
+                AND gender = #{gender}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND phone LIKE "%"#{phone}"%"
+            </if>
+        </where>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="findMap" resultType="map">
+        SELECT
+        tenant.*, house.name as house, unit.id as unitId, unit.name as unit, build.id as buildId, build.name as build
+        FROM
+        <include refid="search"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="countMap" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="search"/>
+    </select>
+</mapper>

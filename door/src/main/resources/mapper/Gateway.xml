@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dnk.smart.door.dao.GatewayDao">
+    <sql id="entity">gateway</sql>
+    <sql id="id">id</sql>
+    <sql id="column">id, unitId, sn, udid, name, ip, port, remote, version, qrCode, createTime, updateTime</sql>
+    <sql id="page">
+        <if test="offset >= 0 and limit > 0">
+            limit #{offset}, #{limit}
+        </if>
+    </sql>
+    <sql id="search">
+        <include refid="entity"/>
+        JOIN unit ON gateway.unitId = unit.id
+        JOIN build ON unit.buildId = build.id
+        <where>
+            <if test="build != null and build != ''">
+                build.name LIKE "%"#{build}"%"
+            </if>
+            <if test="unit != null and unit != ''">
+                AND unit.name LIKE "%"#{unit}"%"
+            </if>
+            <if test="name != null and name != ''">
+                AND gateway.name LIKE "%"#{name}"%"
+            </if>
+        </where>
+    </sql>
+
+    <insert id="save">
+        INSERT INTO
+        <include refid="entity"/>
+        (<include refid="column"/>)
+        VALUES
+        (NULL, #{unitId}, #{sn}, #{udid}, #{name}, #{ip}, #{port}, #{remote}, #{version}, #{qrCode}, NULL, NULL)
+    </insert>
+
+    <insert id="saves">
+        INSERT INTO
+        <include refid="entity"/>
+        (<include refid="column"/>)
+        VALUES
+        <foreach collection="list" item="entity" separator=",">
+            (NULL, #{entity.unitId}, #{entity.sn}, #{entity.udid}, #{entity.name}, #{entity.ip}, #{entity.port}, #{entity.remote}, #{entity.version}, #{entity.qrCode}, NULL, NULL)
+        </foreach>
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+
+    <delete id="deleteByEntity">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByEntities">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="list" item="entity" open="(" separator="," close=")">
+            #{entity.id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        UPDATE
+        <include refid="entity"/>
+        SET
+        unitId = #{unitId}, name = #{name}, ip = #{ip}, port = #{port}, remote = #{remote}, version = #{version}, qrCode = #{qrCode}, updateTime = CURRENT_TIMESTAMP
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </update>
+
+    <select id="findById" resultType="Gateway">
+        SELECT * FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </select>
+
+    <select id="findAll" resultType="Gateway">
+        SELECT * FROM
+        <include refid="entity"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+    </select>
+
+    <select id="findInterval" resultType="Gateway">
+        SELECT * FROM
+        <include refid="entity"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="entity"/>
+    </select>
+
+    <select id="findList" resultType="Gateway">
+        SELECT * FROM
+        <include refid="entity"/>
+        <where>
+            <if test="unitId != null and unitId > 0">
+                unitId = #{unitId}
+            </if>
+            <if test="udid != null and udid != ''">
+                AND udid = #{udid}
+            </if>
+            <if test="name != null and name != ''">
+                AND name LIKE "%"#{name}"%"
+            </if>
+        </where>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="findMap" resultType="map">
+        SELECT
+        gateway.*, unit.name as unit, build.id as buildId, build.name as build
+        FROM
+        <include refid="search"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="countMap" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="search"/>
+    </select>
+</mapper>
