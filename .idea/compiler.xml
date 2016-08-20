@@ -24,10 +24,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="door" />
+        <module name="lock" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="door" target="1.8" />
+      <module name="lock" target="1.8" />
       <module name="smart" target="1.8" />
     </bytecodeTargetLevel>
   </component>

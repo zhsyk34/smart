@@ -9,18 +9,17 @@ import java.util.Date;
 
 @Getter
 @Setter
-//TODO
 public class Record {
 
     private long id;
 
-    private String uuid;// lock-uuid
+    private String uuid;//gateway-udid + deviceNo->lock uuid
 
     private Action action;// 指令
 
     private ActionType type;
 
-    private int number;// 指纹或密码 id
+    private int pass;// 指纹或密码索引(编号)
 
     private String description;// 指令描述
 

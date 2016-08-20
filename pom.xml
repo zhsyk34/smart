@@ -6,6 +6,7 @@
 
     <modules>
         <module>door</module>
+        <module>lock</module>
     </modules>
 
     <groupId>com.dnk</groupId>

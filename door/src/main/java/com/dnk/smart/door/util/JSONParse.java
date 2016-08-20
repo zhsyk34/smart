@@ -15,6 +15,7 @@ public class JSONParse {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        System.out.println(json);
         return json;
     }
 }

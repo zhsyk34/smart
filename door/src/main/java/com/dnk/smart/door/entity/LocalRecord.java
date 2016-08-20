@@ -7,9 +7,11 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * 与record结构相同,脱机开锁记录
+ */
 @Getter
 @Setter
-//TODO
 public class LocalRecord {
 
     private long id;
@@ -20,7 +22,7 @@ public class LocalRecord {
 
     private ActionType type;
 
-    private int number;
+    private int pass;
 
     private String description;
 
