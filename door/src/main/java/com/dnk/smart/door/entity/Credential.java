@@ -1,7 +1,10 @@
 package com.dnk.smart.door.entity;
 
 import com.dnk.smart.door.entity.dict.CredentialType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 

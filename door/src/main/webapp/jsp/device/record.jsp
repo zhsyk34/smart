@@ -3,7 +3,7 @@
 <head>
     <%@ include file="/jsp/commons/commons.jsp" %>
     <title>lock</title>
-    <script src="js/lock.js"></script>
+    <script src="js/record.js"></script>
 </head>
 <body>
 <div>

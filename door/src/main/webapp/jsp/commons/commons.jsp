@@ -1,5 +1,5 @@
 <%
-	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 %>
 <%@ page trimDirectiveWhitespaces="true" %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>

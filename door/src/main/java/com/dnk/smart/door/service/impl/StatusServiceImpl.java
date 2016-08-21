@@ -1,6 +1,8 @@
 package com.dnk.smart.door.service.impl;
 
+import com.dnk.smart.door.dao.LockDao;
 import com.dnk.smart.door.dao.StatusDao;
+import com.dnk.smart.door.entity.Lock;
 import com.dnk.smart.door.entity.Status;
 import com.dnk.smart.door.service.StatusService;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ public class StatusServiceImpl implements StatusService {
 
     @Resource
     private StatusDao statusDao;
+    @Resource
+    private LockDao lockDao;
 
     @Override
     public int save(Status status) {
@@ -31,9 +35,8 @@ public class StatusServiceImpl implements StatusService {
 
     @Override
     public Status find(long lockId) {
-        // TODO
-        // return statusDao.find;
-        return null;
+        Lock lock = lockDao.findById(lockId);
+        return lock == null ? null : statusDao.find(lock.getUuid());
     }
 
 }

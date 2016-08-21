@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/door/door.iml" filepath="$PROJECT_DIR$/door/door.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lock/lock.iml" filepath="$PROJECT_DIR$/lock/lock.iml" />
       <module fileurl="file://$PROJECT_DIR$/smart.iml" filepath="$PROJECT_DIR$/smart.iml" />
     </modules>
   </component>
