@@ -1,2 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dnk.smart.door.dao.LocalRecordDao"></mapper>
+<mapper namespace="com.dnk.smart.door.dao.LocalRecordDao">
+    <sql id="entity">localrecord</sql>
+    <sql id="id">id</sql>
+    <sql id="column">id, uuid, action, type, pass, description, eventTime, createTime</sql>
+    <sql id="page">
+        <if test="offset >= 0 and limit > 0">
+            limit #{offset}, #{limit}
+        </if>
+    </sql>
+    <!--TODO-->
+    <sql id="search">
+        <include refid="entity"/>
+        AS record
+        JOIN credential ON record.uuid = credential.uuid AND record.pass = credential.sequence
+        JOIN tenant ON credential.tenantId = tenant.id
+        JOIN locks ON record.uuid = locks.uuid
+        JOIN house ON locks.houseId = house.id
+        JOIN unit ON house.unitId = unit.id
+        JOIN build ON unit.buildId = build.id
+        <where>
+            <if test="build != null and build != ''">
+                build.name LIKE "%"#{build}"%"
+            </if>
+            <if test="unit != null and unit != ''">
+                AND unit.name LIKE "%"#{unit}"%"
+            </if>
+            <if test="house != null and house != ''">
+                AND house.name LIKE "%"#{house}"%"
+            </if>
+            <if test="lock != null and lock != ''">
+                AND locks.name LIKE "%"#{lock}"%"
+            </if>
+            <if test="action != null">
+                AND record.action = #{action}
+            </if>
+            <if test="type != null">
+                AND record.type = #{type}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="save">
+        INSERT INTO
+        <include refid="entity"/>
+        (
+        <include refid="column"/>
+        )
+        VALUES
+        (NULL, #{uuid}, #{action}, #{type}, #{pass}, #{description}, #{eventTime}, NULL)
+    </insert>
+
+    <insert id="saves">
+        INSERT INTO
+        <include refid="entity"/>
+        (
+        <include refid="column"/>
+        )
+        VALUES
+        <foreach collection="list" item="entity" separator=",">
+            (NULL, #{entity.uuid}, #{entity.action}, #{entity.type}, #{entity.pass}, #{entity.description}, #{entity.eventTime}, NULL)
+        </foreach>
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+
+    <delete id="deleteByEntity">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByEntities">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="list" item="entity" open="(" separator="," close=")">
+            #{entity.id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+    </update>
+
+    <select id="findById" resultType="LocalRecord">
+        SELECT * FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </select>
+
+    <select id="findAll" resultType="LocalRecord">
+        SELECT * FROM
+        <include refid="entity"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+    </select>
+
+    <select id="findInterval" resultType="LocalRecord">
+        SELECT * FROM
+        <include refid="entity"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="entity"/>
+    </select>
+
+    <select id="findList" resultType="LocalRecord">
+        SELECT * FROM
+        <include refid="entity"/>
+        <where>
+            <if test="uuid != null and uuid != ''">
+                uuid = #{uuid}
+            </if>
+            <if test="action != null">
+                AND action = #{action}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+            <if test="pass != null and pass > 0">
+                AND pass = #{pass}
+            </if>
+        </where>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="findMap" resultType="map">
+        SELECT
+        localrecord.*, house.name as house, unit.name as unit, build.name as build, locks.name as locks
+        FROM
+        <include refid="search"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="countMap" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="search"/>
+    </select>
+</mapper>

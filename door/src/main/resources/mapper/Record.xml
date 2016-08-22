@@ -9,8 +9,13 @@
             limit #{offset}, #{limit}
         </if>
     </sql>
+    <!--TODO : type must be open lock-->
     <sql id="search">
         <include refid="entity"/>
+        /*用户*/
+        JOIN credential ON record.uuid = credential.uuid AND record.pass = credential.sequence
+        JOIN tenant ON credential.tenantId = tenant.id
+        /*锁*/
         JOIN locks ON record.uuid = locks.uuid
         JOIN house ON locks.houseId = house.id
         JOIN unit ON house.unitId = unit.id
@@ -25,17 +30,14 @@
             <if test="house != null and house != ''">
                 AND house.name LIKE "%"#{house}"%"
             </if>
-            <if test="name != null and name != ''">
-                AND locks.name LIKE "%"#{name}"%"
+            <if test="lock != null and lock != ''">
+                AND locks.name LIKE "%"#{lock}"%"
             </if>
             <if test="action != null">
                 AND record.action = #{action}
             </if>
             <if test="type != null">
                 AND record.type = #{type}
-            </if>
-            <if test="pass != null and pass > 0">
-                AND record.pass = #{pass}
             </if>
         </where>
     </sql>
@@ -165,7 +167,7 @@
 
     <select id="findMap" resultType="map">
         SELECT
-        record.*, house.name as house, unit.name as unit, build.name as build, lock.name as lock
+        record.*, house.name as house, unit.name as unit, build.name as build, locks.name as locks, tenant.name as tenant
         FROM
         <include refid="search"/>
         ORDER BY

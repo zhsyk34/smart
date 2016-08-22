@@ -39,7 +39,7 @@ public class RecordDaoTest extends InitTest {
 
     @Test
     public void findList() throws Exception {
-        recordDao.findList(null, Action.CLOSE, ActionType.PASSWORD, null, -1, -1).forEach(JSONParse::toJSON);
+        recordDao.findMap(null, null, null, null, null, null, -1, -1).forEach(JSONParse::toJSON);
     }
 
     @Test

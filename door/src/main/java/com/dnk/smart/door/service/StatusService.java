@@ -3,6 +3,7 @@ package com.dnk.smart.door.service;
 import com.dnk.smart.door.entity.Status;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StatusService {
 
@@ -10,8 +11,10 @@ public interface StatusService {
 
     int update(Status status);
 
-    List<Status> findList(int pageNo, int pageSize);
+    List<Map<String, Object>> findList(Long buildId, Long unitId, Long gatewayId, int pageNo, int pageSize);
 
-    Status find(long lockId);
+    int count(Long buildId, Long unitId, Long gatewayId);
+
+    List<Map<Long, List<Status>>> findList(Long unitId, Long gatewayId);
 
 }

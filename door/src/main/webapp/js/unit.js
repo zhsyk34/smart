@@ -11,11 +11,11 @@ $(function () {
             title: "单元列表",
             columns: [[
                 {field: "", checkbox: true},
-                {field: "build", title: "所属楼栋", editor: "text", width: 15},
-                {field: "name", title: "单元名称", editor: "text", width: 15},
-                {field: "code", title: "单元编号", editor: "text", width: 10},
-                {field: "createTime", title: "创建时间", editor: "text", width: 25},
-                {field: "updateTime", title: "修改时间", editor: "text", width: 25}
+                {field: "build", title: "所属楼栋", width: 15},
+                {field: "name", title: "单元名称", width: 15},
+                {field: "code", title: "单元编号", width: 10},
+                {field: "createTime", title: "创建时间", width: 25},
+                {field: "updateTime", title: "修改时间", width: 25}
             ]]
         },
         before: function () {

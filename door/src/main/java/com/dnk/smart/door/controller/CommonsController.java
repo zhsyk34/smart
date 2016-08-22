@@ -29,6 +29,10 @@ class CommonsController {
     protected LockService lockService;
     @Resource
     protected TenantService tenantService;
+    @Resource
+    protected RecordService recordService;
+    @Resource
+    protected StatusService statusService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {

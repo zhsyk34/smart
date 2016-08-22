@@ -4,6 +4,29 @@
     <sql id="entity">status</sql>
     <sql id="id">id</sql>
     <sql id="column">id, uuid, locked, upLock, backLock, voltage, online, time</sql>
+    <sql id="page">
+        <if test="offset >= 0 and limit > 0">
+            limit #{offset}, #{limit}
+        </if>
+    </sql>
+    <sql id="search">
+        <include refid="entity"/>
+        JOIN locks ON status.uuid = locks.uuid
+        JOIN gateway ON locks.gatewayId = gateway.id
+        JOIN unit ON gateway.unitId = unit.id
+        JOIN build ON unit.buildId = build.id
+        <where>
+            <if test="buildId != null and buildId > 0">
+                build.id = #{buildId}
+            </if>
+            <if test="unitId != null and unitId > 0">
+                AND unit.id = #{unitId}
+            </if>
+            <if test="gatewayId != null and gatewayId > 0">
+                AND gateway.id = #{gatewayId}
+            </if>
+        </where>
+    </sql>
 
     <insert id="save">
         INSERT INTO
@@ -101,9 +124,24 @@
         <include refid="entity"/>
     </select>
 
-    <select id="find" resultType="Status">
-        SELECT * FROM
+    <select id="findList" resultType="Status">
+        SELECT locks.* FROM
         <include refid="entity"/>
-        WHERE uuid = #{uuid}
+        JOIN locks ON status.uuid = locks.uuid
+        WHERE locks.gatewayId = #{gatewayId}
+    </select>
+
+    <select id="findMap" resultType="map">
+        SELECT
+        status.*, locks.name as locks, gateway.name as gateway
+        FROM
+        <include refid="search"/>
+        ORDER BY gateway.id DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="countMap" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="search"/>
     </select>
 </mapper>

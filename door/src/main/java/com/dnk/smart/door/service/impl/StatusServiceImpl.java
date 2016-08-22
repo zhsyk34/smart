@@ -1,14 +1,18 @@
 package com.dnk.smart.door.service.impl;
 
-import com.dnk.smart.door.dao.LockDao;
+import com.dnk.smart.door.dao.GatewayDao;
 import com.dnk.smart.door.dao.StatusDao;
-import com.dnk.smart.door.entity.Lock;
+import com.dnk.smart.door.entity.Gateway;
 import com.dnk.smart.door.entity.Status;
 import com.dnk.smart.door.service.StatusService;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StatusServiceImpl implements StatusService {
@@ -16,7 +20,7 @@ public class StatusServiceImpl implements StatusService {
     @Resource
     private StatusDao statusDao;
     @Resource
-    private LockDao lockDao;
+    private GatewayDao gatewayDao;
 
     @Override
     public int save(Status status) {
@@ -29,14 +33,42 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public List<Status> findList(int pageNo, int pageSize) {
-        return statusDao.findInterval((pageNo - 1) * pageSize, pageSize);
+    public List<Map<String, Object>> findList(Long buildId, Long unitId, Long gatewayId, int pageNo, int pageSize) {
+        return statusDao.findMap(buildId, unitId, gatewayId, (pageNo - 1) * pageSize, pageSize);
     }
 
     @Override
-    public Status find(long lockId) {
-        Lock lock = lockDao.findById(lockId);
-        return lock == null ? null : statusDao.find(lock.getUuid());
+    public int count(Long buildId, Long unitId, Long gatewayId) {
+        return statusDao.countMap(buildId, unitId, gatewayId);
+    }
+
+    @Override
+    public List<Map<Long, List<Status>>> findList(Long unitId, Long gatewayId) {
+        List<Gateway> gateways;
+        if (gatewayId != null && gatewayId > 0) {
+            gateways = new ArrayList<>();
+            gateways.add(gatewayDao.findById(gatewayId));
+        } else {
+            gateways = gatewayDao.findList(unitId, null, null, -1, -1);
+        }
+
+        if (CollectionUtils.isEmpty(gateways)) {
+            return null;
+        }
+
+        List<Map<Long, List<Status>>> list = new ArrayList<>();
+        gateways.forEach(gateway -> {
+            List<Status> statuses = statusDao.findList(gateway.getUnitId());
+
+            if (!CollectionUtils.isEmpty(statuses)) {
+                Map<Long, List<Status>> map = new HashMap<>();
+
+                map.put(gateway.getId(), statuses);
+                list.add(map);
+            }
+        });
+
+        return list;
     }
 
 }

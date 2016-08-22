@@ -22,7 +22,6 @@
         </layout>
     </appender>-->
 
-
     <!--<logger name="mapper" level="INFO"/>-->
     <!--<logger name="com.dnk.smart.door.dao" level="INFO"/>-->
 

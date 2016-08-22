@@ -1,2 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dnk.smart.door.dao.SessionInfoDao"></mapper>
+<mapper namespace="com.dnk.smart.door.dao.SessionInfoDao">
+    <sql id="entity">sessioninfo</sql>
+    <sql id="id">id</sql>
+    <sql id="column">id, uuid, ip, tcpport, udpprot, curudprot, createTime, updateTime</sql>
+    <sql id="page">
+        <if test="offset >= 0 and limit > 0">
+            limit #{offset}, #{limit}
+        </if>
+    </sql>
+
+    <insert id="save">
+        INSERT INTO
+        <include refid="entity"/>
+        (<include refid="column"/>)
+        VALUES
+        (NULL, #{uuid}, #{ip}, #{tcpport}, #{udpprot}, #{curudprot}, NULL, NULL)
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+
+    <delete id="deleteByEntity">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByEntities">
+        DELETE FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        IN
+        <foreach collection="list" item="entity" open="(" separator="," close=")">
+            #{entity.id}
+        </foreach>
+    </delete>
+
+    <update id="update">
+        UPDATE
+        <include refid="entity"/>
+        SET
+        ip = #{ip}, tcpport = #{tcpport}, udpprot = #{udpprot}, curudprot = #{curudprot}, updateTime = CURRENT_TIMESTAMP
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </update>
+
+    <select id="findById" resultType="SessionInfo">
+        SELECT * FROM
+        <include refid="entity"/>
+        WHERE
+        <include refid="id"/>
+        = #{id}
+    </select>
+
+    <select id="findAll" resultType="SessionInfo">
+        SELECT * FROM
+        <include refid="entity"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+    </select>
+
+    <select id="findInterval" resultType="SessionInfo">
+        SELECT * FROM
+        <include refid="entity"/>
+        ORDER BY
+        <include refid="id"/>
+        DESC
+        <include refid="page"/>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM
+        <include refid="entity"/>
+    </select>
+
+    <select id="find" resultType="SessionInfo">
+        SELECT * FROM
+        <include refid="entity"/>
+        udid = #{udid}
+    </select>
+</mapper>

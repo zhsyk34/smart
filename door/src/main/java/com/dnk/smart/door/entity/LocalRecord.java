@@ -2,7 +2,9 @@ package com.dnk.smart.door.entity;
 
 import com.dnk.smart.door.entity.dict.Action;
 import com.dnk.smart.door.entity.dict.ActionType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -12,6 +14,8 @@ import java.util.Date;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class LocalRecord {
 
     private long id;

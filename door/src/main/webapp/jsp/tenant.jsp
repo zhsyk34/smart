@@ -18,11 +18,13 @@
                 <td>房屋名称:</td>
                 <td><input id="search-house" class="easyui-textbox"></td>
                 <td>性别:</td>
-                <td><select id="search-gender">
-                    <option value="" selected>全部</option>
-                    <option value="male">男</option>
-                    <option value="female">女</option>
-                </select></td>
+                <td>
+                    <select id="search-gender">
+                        <option value="" selected>全部</option>
+                        <option value="male">男</option>
+                        <option value="female">女</option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td>姓名:</td>

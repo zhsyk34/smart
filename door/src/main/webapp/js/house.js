@@ -31,8 +31,9 @@ $(function () {
                 {field: "build", title: "所属楼栋", width: 15},
                 {field: "unit", title: "所属单元", width: 15},
                 {field: "name", title: "房屋名称", width: 15},
-                {field: "createTime", title: "createTime", width: 20},
-                {field: "updateTime", title: "updateTime", width: 20}
+                {field: "code", title: "房屋编号", width: 10},
+                {field: "createTime", title: "创建时间", width: 20},
+                {field: "updateTime", title: "修改时间", width: 20}
             ]]
         },
         before: function () {

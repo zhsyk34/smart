@@ -9,7 +9,6 @@
             limit #{offset}, #{limit}
         </if>
     </sql>
-    <!-- TODO -->
     <sql id="search">
         <include refid="entity"/>
         JOIN house ON tenant.houseId = house.id

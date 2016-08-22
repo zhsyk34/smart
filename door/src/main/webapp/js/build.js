@@ -8,12 +8,13 @@ $(function () {
             exist: "build/exist"
         },
         gridOption: {
-            title: "用户列表",
+            title: "楼栋列表",
             columns: [[
                 {field: "", checkbox: true},
-                {field: "name", title: "name", editor: "text", width: 25},
-                {field: "createTime", title: "createTime", editor: "text", width: 30},
-                {field: "updateTime", title: "updateTime", editor: "text", width: 30}
+                {field: "name", title: "楼栋名称", editor: "text", width: 20},
+                {field: "code", title: "楼栋编号", editor: "text", width: 20},
+                {field: "createTime", title: "创建时间", editor: "text", width: 30},
+                {field: "updateTime", title: "修改时间", editor: "text", width: 30}
             ]]
         },
         findParams: function () {
