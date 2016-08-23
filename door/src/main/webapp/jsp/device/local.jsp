@@ -1,4 +1,3 @@
-\
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -7,7 +6,7 @@
     <script src="js/record.js"></script>
 </head>
 <body>
-<div>
+<div id="wrap">
     <div id="nav">
         <table>
             <tbody>

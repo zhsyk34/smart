@@ -1,7 +1,9 @@
 package com.dnk.smart.door.service.impl;
 
 import com.dnk.smart.door.dao.LockDao;
+import com.dnk.smart.door.dao.TenantDao;
 import com.dnk.smart.door.entity.Lock;
+import com.dnk.smart.door.entity.Tenant;
 import com.dnk.smart.door.service.LockService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -15,6 +17,8 @@ public class LockServiceImpl implements LockService {
 
     @Resource
     private LockDao lockDao;
+    @Resource
+    private TenantDao tenantDao;
 
     @Override
     public int save(Lock lock) {
@@ -60,8 +64,12 @@ public class LockServiceImpl implements LockService {
 
     @Override
     public boolean relate(long id) {
-        // TODO
-        return false;
+        //TODO tenant->house->lock
+        Lock lock = lockDao.findById(id);
+        long houseId = lock.getHouseId();
+
+        List<Tenant> list = tenantDao.findList(houseId, null, null, null, null, -1, -1);
+        return !CollectionUtils.isEmpty(list);
     }
 
     @Override

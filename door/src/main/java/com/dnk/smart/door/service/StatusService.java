@@ -17,4 +17,6 @@ public interface StatusService {
 
     List<Map<Long, List<Status>>> findList(Long unitId, Long gatewayId);
 
+    List<Map<String, List<Map<String, Object>>>> findVOList(Long unitId, Long gatewayId);
+
 }

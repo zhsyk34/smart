@@ -71,4 +71,32 @@ public class StatusServiceImpl implements StatusService {
         return list;
     }
 
+    @Override
+    public List<Map<String, List<Map<String, Object>>>> findVOList(Long unitId, Long gatewayId) {
+        List<Gateway> gateways;
+        if (gatewayId != null && gatewayId > 0) {
+            gateways = new ArrayList<>();
+            gateways.add(gatewayDao.findById(gatewayId));
+        } else {
+            gateways = gatewayDao.findList(unitId, null, null, -1, -1);
+        }
+
+        if (CollectionUtils.isEmpty(gateways)) {
+            return null;
+        }
+
+        List<Map<String, List<Map<String, Object>>>> list = new ArrayList<>();
+        gateways.forEach(gateway -> {
+            List<Map<String, Object>> maps = statusDao.findMap(null, gateway.getUnitId(), null, -1, -1);
+
+            if (!CollectionUtils.isEmpty(maps)) {
+                Map<String, List<Map<String, Object>>> map = new HashMap<>();
+
+                map.put(gateway.getName(), maps);
+                list.add(map);
+            }
+        });
+        return list;
+    }
+
 }

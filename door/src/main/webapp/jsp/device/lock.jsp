@@ -6,7 +6,7 @@
     <script src="js/lock.js"></script>
 </head>
 <body>
-<div>
+<div id="wrap">
     <div id="nav">
         <table>
             <tbody>

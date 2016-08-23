@@ -3,20 +3,35 @@
 }
 
 .thumbnail {
-    display: inline-block;
+    border-collapse: collapse;
+    float: left;
     border: 1px solid #95B8E7;
     width: 300px;
-    height: 300px;
-    background: #eee;
-    margin: 10px;
+    height: 280px;
+    margin: 15px;
 }
 
-.thumbnail div {
-    padding: 0;
-    margin: 0;
+.thumbnail caption {
+    padding-bottom: 12px;
 }
 
-.thumbnail:after {
-    display: inline-block;
-    content: "";
+.thumbnail td {
+    width: 50%;
+    height: 80px;
+    border: 1px solid #95B8E7;
+    padding: 10px;
+    text-align: center;
 }
+
+.thumbnail td:hover {
+    background: #d7efe1;
+}
+
+#show {
+    padding: 10px 10px 20px 8px;
+}
+
+#show td {
+    padding: 5px;
+}
+

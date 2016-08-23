@@ -1,5 +1,5 @@
-iframe body + div {
-    height: 100%;
+#wrap {
+    min-height: 80%;
 }
 
 #nav {

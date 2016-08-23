@@ -8,7 +8,9 @@
 </head>
 <body>
 <div id="wrap" class="easyui-layout">
-    <div id="header" data-options="region:'north',border:'true'"></div>
+    <div id="header" data-options="region:'north',border:'true'">
+        <div><a href="user/logout">退出登录</a></div>
+    </div>
 
     <div id="footer" data-options="region:'south'">
         <p>Copyright (c) 2016 Dnk Smart</p>
@@ -19,9 +21,9 @@
         <div id="accordion" class="easyui-accordion" data-options="multiple:true,border:false">
             <div title="用户" data-options="selected:true">
                 <ul>
-                    <li>
+                    <%--<li>
                         <a href="jsp/user.jsp">管理员管理</a>
-                    </li>
+                    </li>--%>
                     <li>
                         <a href="jsp/tenant.jsp">租客管理</a>
                     </li>
