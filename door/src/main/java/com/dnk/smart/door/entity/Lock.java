@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * relate:credential
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +26,7 @@ public class Lock {
 
     private String name;
 
-    private int area;// 区域号
+    private String password;// 主密码,出厂设置
 
     private int device;// 设备号
 

@@ -8,32 +8,25 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * relate:credential
+ * 系统配置信息:临时密码
+ *
+ * @author Archimedes
  */
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Tenant {
+@NoArgsConstructor
+public class Config {
 
-    private long id;
-
-    private long houseId;
+    private int id;
 
     private String name;
 
-    private String idCard;
+    private String value;
 
-    private String phone;
-
-    private String gender;//TODO
-
-    private String email;
-
-    private boolean used;
+    private String description;
 
     private Date createTime;
 
     private Date updateTime;
-
 }

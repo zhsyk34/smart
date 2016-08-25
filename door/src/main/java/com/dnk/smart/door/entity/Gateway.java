@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * relate:lock
+ */
 @Getter
 @Setter
 @NoArgsConstructor

@@ -67,7 +67,6 @@ $(function () {
         },
         beforeOpenAdd: function () {
             $("#id").val(0);
-            // $("#uuid").textbox("readonly", false);
         },
         beforeOpenMod: function (row) {
             $("#build-selector").combobox("setValue", row.buildId).combobox("setText", row.build);

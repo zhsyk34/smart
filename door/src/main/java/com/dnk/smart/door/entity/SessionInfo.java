@@ -15,8 +15,6 @@ public class SessionInfo {
 
     private long id;
 
-    //private String sn;
-
     private String udid;
 
     private String ip;

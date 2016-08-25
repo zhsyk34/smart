@@ -5,7 +5,7 @@
     <sql id="id">id</sql>
     <sql id="column">id, name, password, createTime, updateTime</sql>
 
-    <insert id="save">
+    <insert id="save" keyProperty="id">
         INSERT INTO
         <include refid="entity"/>
         <include refid="column"/>

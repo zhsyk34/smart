@@ -3,7 +3,7 @@
 <mapper namespace="com.dnk.smart.door.dao.LockDao">
     <sql id="entity">locks</sql>
     <sql id="id">id</sql>
-    <sql id="column">id, gatewayId, houseId, uuid, name, area, device, createTime, updateTime</sql>
+    <sql id="column">id, gatewayId, houseId, uuid, name, password, device, createTime, updateTime</sql>
     <sql id="page">
         <if test="offset >= 0 and limit > 0">
             limit #{offset}, #{limit}
@@ -30,26 +30,14 @@
         </where>
     </sql>
 
-    <insert id="save">
+    <insert id="save" keyProperty="id">
         INSERT INTO
         <include refid="entity"/>
         (
         <include refid="column"/>
         )
         VALUES
-        (NULL, #{gatewayId}, #{houseId}, UUID(), #{name}, #{area}, #{device}, NULL, NULL)
-    </insert>
-
-    <insert id="saves">
-        INSERT INTO
-        <include refid="entity"/>
-        (
-        <include refid="column"/>
-        )
-        VALUES
-        <foreach collection="list" item="entity" separator=",">
-            (NULL, #{entity.gatewayId}, #{entity.houseId}, UUID(), #{entity.name}, #{entity.area}, #{entity.device}, NULL, NULL)
-        </foreach>
+        (NULL, #{gatewayId}, #{houseId}, UUID(), #{name}, #{password}, #{device}, NULL, NULL)
     </insert>
 
     <delete id="deleteById">
@@ -90,11 +78,18 @@
         </foreach>
     </delete>
 
+    <!-- TODO -->
     <update id="update">
         UPDATE
         <include refid="entity"/>
         SET
-        gatewayId = #{gatewayId}, houseId = #{houseId}, name = #{name}, area = #{area}, device = #{device}, updateTime = CURRENT_TIMESTAMP
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+        <if test="password != null and password != ''">
+            password = #{password},
+        </if>
+        updateTime = CURRENT_TIMESTAMP
         WHERE
         <include refid="id"/>
         = #{id}
@@ -172,6 +167,7 @@
     <select id="findDevice" resultType="int">
         SELECT device FROM
         <include refid="entity"/>
+        WHERE gatewayId = #{gatewayId}
         ORDER BY device ASC
     </select>
 </mapper>

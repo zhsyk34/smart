@@ -12,6 +12,8 @@
     <sql id="search">
         <include refid="entity"/>
         JOIN house ON tenant.houseId = house.id
+        JOIN locks ON locks.houseId = house.id
+        JOIN credential ON credential.lockId = locks.id AND credential.tenantId = tenant.id AND credential.type = 'PASSWORD'
         JOIN unit ON house.unitId = unit.id
         JOIN build ON unit.buildId = build.id
         <where>
@@ -39,7 +41,7 @@
         </where>
     </sql>
 
-    <insert id="save">
+    <insert id="save" keyProperty="id">
         INSERT INTO
         <include refid="entity"/>
         (
@@ -167,7 +169,7 @@
 
     <select id="findMap" resultType="map">
         SELECT
-        tenant.*, house.name as house, unit.id as unitId, unit.name as unit, build.id as buildId, build.name as build
+        tenant.*, house.name as house, unit.id as unitId, unit.name as unit, build.id as buildId, build.name as build, locks.id as lockId, locks.name as locks, credential.value as password
         FROM
         <include refid="search"/>
         ORDER BY

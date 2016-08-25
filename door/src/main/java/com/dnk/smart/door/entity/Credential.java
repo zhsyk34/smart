@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * 凭据,密码或指纹等...
+ * 凭据:密码或指纹等,同一用户tenantId在某设备lockId上只能有唯一的凭据?
  */
 @Getter
 @Setter
@@ -21,11 +21,13 @@ public class Credential {
 
     private long tenantId;
 
-    private String uuid;
+    private long lockId;
 
     private CredentialType type;
 
-    private int sequence;
+    private String value;
+
+    private int sequence;// 1:主密码,99:临时密码,用户密码:2-98
 
     private Date createTime;
 

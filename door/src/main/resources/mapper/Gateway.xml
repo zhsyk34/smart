@@ -26,7 +26,7 @@
         </where>
     </sql>
 
-    <insert id="save">
+    <insert id="save" keyProperty="id">
         INSERT INTO
         <include refid="entity"/>
         (<include refid="column"/>)

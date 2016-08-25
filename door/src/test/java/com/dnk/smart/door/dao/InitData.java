@@ -36,6 +36,14 @@ public class InitData extends InitTest {
     private CredentialDao credentialDao;
 
     @Test
+    public void init7() {
+        Build build = new Build(0L, "build001", 344, null, null);
+        int r = buildDao.save(build);
+        System.out.println(r);
+        System.out.println(build.getId());
+    }
+
+    @Test
     public void init6() {
         List<Status> statuses = new ArrayList<>();
 

@@ -90,7 +90,7 @@ CREATE TABLE locks (
   houseId    BIGINT UNSIGNED  NOT NULL,
   uuid       VARCHAR(36)      NOT NULL, /*uuid()方法自动生成*/
   name       VARCHAR(30)      NOT NULL,
-  area       TINYINT          NOT NULL DEFAULT -1,
+  password   VARCHAR(30)      NOT NULL,
   device     TINYINT UNSIGNED NOT NULL,
   createTime TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updateTime TIMESTAMP,
@@ -163,8 +163,9 @@ CREATE TABLE sessioninfo (
 CREATE TABLE credential (
   id         BIGINT UNSIGNED  NOT NULL AUTO_INCREMENT,
   tenantId   BIGINT UNSIGNED  NOT NULL,
-  uuid       VARCHAR(36)      NOT NULL,
+  lockId     BIGINT UNSIGNED  NOT NULL,
   type       VARCHAR(20)      NOT NULL,
+  value      VARCHAR(30)      NOT NULL,
   sequence   TINYINT UNSIGNED NOT NULL,
   createTime TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updateTime TIMESTAMP,
@@ -174,8 +175,37 @@ CREATE TABLE credential (
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = UTF8;
 
+CREATE TABLE config (
+  id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name        VARCHAR(30)     NOT NULL,
+  value       VARCHAR(30)     NOT NULL,
+  description VARCHAR(30)     NOT NULL,
+  createTime  TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updateTime  TIMESTAMP,
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = UTF8;
 
+/*外键*/
 ALTER TABLE unit
-  ADD CONSTRAINT fk_build FOREIGN KEY (buildId) REFERENCES build (id);
+  ADD CONSTRAINT fk_unit_build FOREIGN KEY (buildId) REFERENCES build (id);
+
 ALTER TABLE house
-  ADD CONSTRAINT fk_unit FOREIGN KEY (unitId) REFERENCES unit (id);
+  ADD CONSTRAINT fk_house_unit FOREIGN KEY (unitId) REFERENCES unit (id);
+
+ALTER TABLE gateway
+  ADD CONSTRAINT fk_gateway_unit FOREIGN KEY (unitId) REFERENCES unit (id);
+
+ALTER TABLE locks
+  ADD CONSTRAINT fk_locks_gateway FOREIGN KEY (gatewayId) REFERENCES gateway (id),
+  ADD CONSTRAINT fk_locks_house FOREIGN KEY (houseId) REFERENCES house (id);
+
+ALTER TABLE tenant
+  ADD CONSTRAINT fk_tenant_house FOREIGN KEY (houseId) REFERENCES house (id);
+
+ALTER TABLE credential
+  ADD CONSTRAINT fk_credential_locks FOREIGN KEY (lockId) REFERENCES locks (id),
+  ADD CONSTRAINT fk_credential_tenant FOREIGN KEY (tenantId) REFERENCES tenant (id);
+

@@ -7,5 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface CredentialDao extends CommonsDao<Credential> {
-    List<Credential> findList(@Param("tenantId") Long tenantId, @Param("uuid") String uuid, @Param("type") CredentialType type, @Param("sequence") Integer sequence);
+
+    List<Credential> findList(@Param("tenantId") Long tenantId, @Param("lockId") Long lockId, @Param("type") CredentialType type, @Param("sequence") Integer sequence);
+
+    List<Integer> allot(@Param("lockId") long lockId, @Param("type") CredentialType type);
+
 }
